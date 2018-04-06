@@ -1,67 +1,96 @@
-// Learned about the compound operator. eg: x += 4
+//learned about difference between let and var in js:
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let
 
-// Took some code hints from here on expanding circles:
-// https://forum.processing.org/two/discussion/5615/coding-noob-needs-help-how-do-i-draw-an-expanding-circle-that-triggers-with-a-mouse-click
+//took much knowledge on arrays and classes from here:
+//https://www.youtube.com/watch?v=fBqaA7zRO58
 
 var grow = false;
-var magicNumber = 50;
-var magicNumberOG;
-var pressTime, releaseTime, frameCountText, clickLengthText, clickLocationX, clickLocationY;
+var magicNumber = 10;
+var pressTime, releaseTime, clickLocationX, clickLocationY;
+let gradientCircles = [];
 
 function setup() {
-    magicNumberOG = magicNumber;
-    titleText = createElement( 'h3', "Expanding Click | Radial Blossoms");
+    titleText = createElement( 'h3', "Hue Shifting Trail Dumper");
     createCanvas(710, 400);
     background(225);
+    frameRate(24);
     colorMode(HSB, 360, 100, 100);
     noStroke();
-    ellipseMode(CENTER);
-    frameRate(24);
-    frameCountText = createElement( 'p', 0);
-    clickLengthText = createElement( 'p', 0);
-    //    noLoop();
+    
+    for (i = 0; i < magicNumber; i ++) {
+        let x = random (width);
+        let y = random (height);
+        let radius = random (20, 500);
+        let hue= random (1, 360);
+        gradientCircles[i] = new GradientCircle(x , y, radius, hue);
+    }
 }
 
 function draw() {
-    expandingClick() 
-    frameCountText.html("frameCount: " + frameCount);   
-    }
-
-function mousePressed() {
-    grow = true;
-    magicNumber = magicNumberOG;
-    clickLocationX = mouseX;
-    clickLocationY = mouseY;
-    pressTime = frameCount;
-    
-} 
-
-function mouseReleased() {
-    grow = false;
-    releaseTime = frameCount;
-    var clickLength = releaseTime - pressTime;
-    clickLengthText.html("clickLength: " + clickLength);
-    drawGradient(clickLocationX, clickLocationY, clickLength);
-}
-
-function expandingClick() {
-  if (grow) {
-      magicNumber += 4;
-    ellipse(clickLocationX, clickLocationY, magicNumber / 2);
-//    ellipse(clickLocationX, clickLocationY, magicNumber / 4);
-//    ellipse(clickLocationX, clickLocationY, magicNumber / 8);      
-  }
-}
-
-function drawGradient(x, y, radius) {
-    var h = random(0, 360);
-//    var s = random(20, 100);
-//    var b = random(20, 100);
-    for (var r = constrain(radius, 1, 5) * (magicNumber / 2); r > 0; --r) {
-        fill(h, 90, 90);
-        ellipse(x, y, r, r);
-        h = (h + random(0.001, 2)) % 360;
-//        s = (s + 1) % 100 +50;
-//        b = (b + 1) % 10;
+    for (i = 0; i < gradientCircles.length; i ++) {
+            gradientCircles[i].move();
+//            gradientCircles[i].show();
+            gradientCircles[i].showGrad();
     }
 }
+
+class GradientCircle {
+    constructor(x, y, radius, hue) {
+        this.x = x;
+        this.y = y;
+        this.r = radius;
+        this.h = hue;
+    }
+    move() {
+        this.x = this.x + random(-magicNumber/4, magicNumber/5);
+        this.y = this.y + random(-magicNumber/5, magicNumber/4);
+    }
+    showGrad() {
+         for (var i =  this.r; i > 0; i -= 2) {
+            fill(this.h, 90, 90);
+            this.h = (this.h + 0.075)% 360;
+            ellipse(this.x, this.y, i);
+        }
+    }
+    show() {
+        fill(this.h, 90, 90);
+//        this.h = (this.h + 1) % 360;
+        this.h = (this.h + random(0, 5)) % 360;
+        ellipse(this.x, this.y, this.r);
+        }
+}
+
+//function expandingCircle() {
+//  if (grow) {
+//      magicNumber += 4;
+//      ellipse(clickLocationX, clickLocationY, magicNumber / 2);    
+//  }
+//}
+//
+//function mousePressed() {
+//    grow = true;
+//    magicNumber = magicNumberOG;
+//    clickLocationX = mouseX;
+//    clickLocationY = mouseY;
+//    pressTime = frameCount;     
+//} 
+//
+//function mouseReleased() {
+//    grow = false;
+//    releaseTime = frameCount;
+//    var clickLength = releaseTime - pressTime;
+//    drawGradient(clickLocationX, clickLocationY, clickLength);
+//}
+
+//if (mouseIsPressed) {
+////    new expandingCircle() in circles;
+//    if (mouseButton === LEFT) {
+//      ellipse(50, 50, 50, 50);
+//    }
+//    if (mouseButton === RIGHT) {
+//      rect(25, 25, 50, 50);
+//    }
+//    if (mouseButton === CENTER) {
+//      triangle(23, 75, 50, 20, 78, 75);
+//    }
+//}
