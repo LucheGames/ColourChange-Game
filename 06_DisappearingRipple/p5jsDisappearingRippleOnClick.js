@@ -4,6 +4,9 @@
 //pretty much straight cribbing off codeingTrain at this point:
 //https://www.youtube.com/watch?v=tA_ZgruFF9k&index=28&list=PLRqwX-V7Uu6Zy51Q-x9tMWIv9cueOFTFA
 
+//not all circles are created equal!
+//https://processing.org/reference/ellipseMode_.html
+
 var magicNumber = 10;
 let gradientCircles = [];
 
