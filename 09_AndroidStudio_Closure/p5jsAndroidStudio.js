@@ -2,15 +2,12 @@ var magicNumber = 30;
 let gradientCircles = [];
 
 function setup() {
-    //    background(225);
     titleText = createElement( 'h3', "Disappearing Ripple | On Drag");
     createCanvas(windowWidth, windowHeight);
     ellipseMode(RADIUS);
     frameRate(24);
     colorMode(HSB, 360, 100, 100);
     noStroke();
-  
-//    Randomly generate a bunch at startup:
     
     for (i = 0; i < magicNumber; i ++) {
         let x = random (width);
@@ -20,8 +17,7 @@ function setup() {
         let bright= random (50, 70);
         let c = new GradientCircle(x , y, radius, hue, bright);
         gradientCircles.push(c);
-    }
-    
+    }   
 }
 
 function draw() {
@@ -42,12 +38,6 @@ function draw() {
 }
 
 function mousePressed() {
-//  if (value === 0) {
-//    value = 255;
-//  } else {
-//    value = 0;
-//  }
-    
     for (i = 0; i < magicNumber; i ++) {
         let x = random (width);
         let y = random (height);
@@ -59,15 +49,10 @@ function mousePressed() {
     }
 }
 
-
-
 function mouseDragged() {
-//        let x = random (width);
-//        let y = random (height);
         let x = mouseX + random(-magicNumber/5, magicNumber/5);
         let y = mouseY + random(-magicNumber/5, magicNumber/5);
         let radius = random (20, 100);
-//        let hue= random (1, 360);
         let hue= random (300, 360); //to give hues more simalarity
         let bright= random (10, 40);
         let c = new GradientCircle(x , y, radius, hue, bright);
