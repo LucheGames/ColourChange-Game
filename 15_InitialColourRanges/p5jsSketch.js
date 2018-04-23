@@ -1,17 +1,24 @@
 // Struggling to get p5js to be fulscreen without extra space and scrollbars:
 // https://github.com/processing/p5.js-editor/issues/146
+// Solution here:
+// https://github.com/processing/p5.js/issues/2619
 
 // 2Do:
-// Make fullscreen flush with browser window, NO SIDEBARS!!!
-// Colour band array: an array of pleasing ranges for the initial hue of new circles, each click starts with a different array.
-// Speed effects: Elongate / smear / shrink circles depending on velocity of user drag, capturing more of the feeling of their gesture.
+// Make fullscreen flush with browser window, NO SIDEBARS!!! DONE!!!!!!
+// Colour band array: an array of pleasing ranges for the initial hue of new circles, each click starts with a different array. DONE!
 
+// Speed effects: Elongate / smear / shrink circles depending on velocity of user drag, capturing more of the feeling of their gesture.
+//This p5js example captures mouse forces:
+//https://p5js.org/examples/hello-p5-drawing.html
+
+var randomHue, snakeColour;
 var magicNumber = 12;
 var snakeLength = 65;
 var circleFadeOut = true;
 var pulseSnake = false;
 let gradientCirclesFore = [];
 let gradientCirclesBg = [];
+let colourList = [360, 300, 265, 210, 115, 60, 35];
 
 function setup() {
 //    titleText = createElement( 'h3', "Backwards Ripple");
@@ -21,15 +28,16 @@ function setup() {
     frameRate(30);
     colorMode(HSB, 360, 100, 100);
     noStroke();
-    randomBgHue = random(1, 360);
+    randomHue = random(1, 360);
+    snakeColour = random(colourList);
     fullscreen();
     circleExplosion(gradientCirclesBg, magicNumber);
 }
 
 function draw() {
     background(100);
-    background(randomBgHue, 100, 100, 0.25); // color BG
-    randomBgHue = (randomBgHue+ 0.5)% 360;
+    background(randomHue, 100, 100, 0.25); // color BG
+    randomHue = (randomHue+ 0.5)% 360;
     
     gradientCirclesBg.forEach(function(circle, index, arr) {
 //        circle.rolloverCheck(circle); // rollover
@@ -104,8 +112,10 @@ function buildSnake(targetArray) {
     var x = mouseX + random(-magicNumber/5, magicNumber/5);
     var y = mouseY + random(-magicNumber/5, magicNumber/5);
     var radius = random (3, 15) * random (2, 14);
-//    var hue= random (300, 360); //to give hues more simalarity
-    var hue= (random (1, 360); //to give hues more simalarity
+//    var hue = random (300, 360); //defined range to give hues more simalarity
+//    var hue = (random(colourList) + random( -magicNumber, magicNumber)) % 360; // double rainbow!
+    var hue = (snakeColour + random( -40, 10)) % 360
+    
     var bright= random (90, 100);
     var saturation = random (50, 80);
     var alpha = random (0.5, 0.9);
@@ -118,6 +128,7 @@ function buildSnake(targetArray) {
 function mouseReleased() {
     circleFadeOut = true;
     pulseSnake = false;
+    snakeColour = random(colourList);
 }
 
 class GradientCircle {
@@ -140,7 +151,7 @@ class GradientCircle {
             this.p = false;
             this.b -= 1;
         }
-        if (this.b < 80){
+        if (this.b < 75){
             this.p = true;
         }
     }
@@ -211,7 +222,7 @@ class GradientCircle {
 //        } 
 //    }
     
-} //end of constructor
+} // end of constructor
 
 function ArrayBoundsCheck (arrayToBeChecked, maxLength) {
     var  arrLength = arrayToBeChecked.length;
